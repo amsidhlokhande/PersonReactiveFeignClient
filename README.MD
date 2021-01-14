@@ -1,10 +1,11 @@
 <b> Process to Build and Up the Service  </b>
 1) Maven clean install build -> start Eureka Server -> Address Service -> Person Service
 <br>
-
-Eureka Server  http://localhost:8010/
-Person Service http://192.168.1.5:59655/persons
-Address Service http://localhost:59271/addresses
+<ul>
+<li>Eureka Server  http://localhost:8010/<li>
+<li>Person Service http://192.168.1.5:59655/persons<li>
+<li>Address Service http://localhost:59271/addresses<li>
+</ul>
 <br>
 Person-Address api Call http://localhost:59271/addresses/1/addresses
 
