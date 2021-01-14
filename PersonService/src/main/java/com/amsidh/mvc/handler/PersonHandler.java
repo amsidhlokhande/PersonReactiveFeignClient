@@ -2,6 +2,7 @@ package com.amsidh.mvc.handler;
 
 import com.amsidh.mvc.document.Address;
 import com.amsidh.mvc.document.PersonInfo;
+import com.amsidh.mvc.feign.AddressFeignClient;
 import com.amsidh.mvc.repository.PersonRepository;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.server.HandlerFunction;
 import org.springframework.web.reactive.function.server.ServerResponse;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
@@ -23,15 +25,16 @@ import static org.springframework.web.reactive.function.server.ServerResponse.ok
 @AllArgsConstructor
 public class PersonHandler {
 
-    public static final String ADDRESS_URL = "http://localhost:59271/addresses/%s/addresses";
+    public static final String ADDRESS_URL = "http://localhost:8282/addresses/%s/addresses";
     private PersonRepository personRepository;
     private RestTemplate restTemplate;
+    private AddressFeignClient addressFeignClient;
 
     public HandlerFunction<ServerResponse> findPersonById() {
-        return request -> ok().body(personRepository.findById(request.pathVariable("personId")).flatMap(person -> {
-            setAddressesToPerson(person);
+        return request -> ok().body(personRepository.findById(request.pathVariable("personId")).flatMap(person -> addressFeignClient.getAddressesByPersonId(person.get_id()).collectList().flatMap(addresses -> {
+            person.setAddresses(addresses);
             return Mono.justOrEmpty(person);
-        }), PersonInfo.class);
+        })).switchIfEmpty(Mono.empty()), PersonInfo.class);
 
     }
 

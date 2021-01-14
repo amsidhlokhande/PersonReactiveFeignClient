@@ -6,6 +6,7 @@ import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -19,5 +20,5 @@ public class PersonInfo implements Serializable {
     private String _id;
     private String name;
     @Transient
-    private List<Address> addresses;
+    private List<Address> addresses = new ArrayList<>();
 }
