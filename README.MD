@@ -1,4 +1,33 @@
-package com.amsidh.mvc.handler;
+<b> Process to Build and Up the Service  </b>
+1) Maven clean install build -> start Eureka Server -> Address Service -> Person Service
+<br>
+
+Eureka Server  http://localhost:8010/
+Person Service http://192.168.1.5:59655/persons
+Address Service http://localhost:59271/addresses
+<br>
+Person-Address api Call http://localhost:59271/addresses/1/addresses
+
+Initially we are using RestTemplate to call address service but this is synchronous non reactive and blocking call.
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.client.RestTemplate;
+@Configuration
+public class AppConfig {
+
+    @Bean
+    public RestTemplate getRestTemplate(){
+        RestTemplate restTemplate = new RestTemplate();
+        return restTemplate;
+
+    }
+}
+
+
+
+And In Service/Handler
+
 
 import com.amsidh.mvc.document.Address;
 import com.amsidh.mvc.document.PersonInfo;
@@ -51,3 +80,4 @@ public class PersonHandler {
 
 
 }
+
